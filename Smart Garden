@@ -73,14 +73,14 @@
 <body>
   <h1>🌿 Smart Garden 🌿</h1>
   <div class="card">
-    <div class="status">🌡️<span>Nhiệt độ: 26°C</span></div>
-    <div class="status">💧<span>Độ ẩm không khí: 65%</span></div>
-    <div class="status">🌱<span>Độ ẩm đất: 430 (Khô nếu &lt; 500)</span></div>
-    <div class="status">☀️<span>Ánh sáng: Tối</span></div>
-    <div class="status">🌧️<span>Mưa: Không mưa</span></div>
-    <div class="status">🔄<span>Chế độ: Tự động</span></div>
-    <div class="status">💡<span>Đèn: BẬT</span></div>
-    <div class="status">🚿<span>Máy bơm: TẮT</span></div>
+    <div class="status">🌡️<span>Nhiệt độ: Đang tải...</span></div>
+    <div class="status">💧<span>Độ ẩm không khí: Đang tải...</span></div>
+    <div class="status">🌱<span>Độ ẩm đất: Đang tải...</span></div>
+    <div class="status">☀️<span>Ánh sáng: Đang tải...</span></div>
+    <div class="status">🌧️<span>Mưa: Đang tải...</span></div>
+    <div class="status">🔄<span>Chế độ: Đang tải...</span></div>
+    <div class="status">💡<span>Đèn: Đang tải...</span></div>
+    <div class="status">🚿<span>Máy bơm: Đang tải...</span></div>
 
     <div class="buttons">
       <button class="btn btn-mode">🔄 Chuyển chế độ</button>
@@ -88,5 +88,61 @@
       <button class="btn btn-light">💡 Bật/Tắt Đèn</button>
     </div>
   </div>
+
+  <script>
+    // Hàm cập nhật giao diện
+    function updateUI(data) {
+      document.querySelector('.status:nth-child(1) span').textContent = `Nhiệt độ: ${data.temperature}°C`;
+      document.querySelector('.status:nth-child(2) span').textContent = `Độ ẩm không khí: ${data.humidity}%`;
+      document.querySelector('.status:nth-child(3) span').textContent = `Độ ẩm đất: ${data.soilMoisture} (${data.soilMoisture < 500 ? 'Khô' : 'Đủ ẩm'})`;
+      document.querySelector('.status:nth-child(4) span').textContent = `Ánh sáng: ${data.light}`;
+      document.querySelector('.status:nth-child(5) span').textContent = `Mưa: ${data.rain ? 'Có mưa' : 'Không mưa'}`;
+      document.querySelector('.status:nth-child(6) span').textContent = `Chế độ: ${data.mode === 'auto' ? 'Tự động' : 'Thủ công'}`;
+      document.querySelector('.status:nth-child(7) span').textContent = `Đèn: ${data.lightOn ? 'BẬT' : 'TẮT'}`;
+      document.querySelector('.status:nth-child(8) span').textContent = `Máy bơm: ${data.pumpOn ? 'BẬT' : 'TẮT'}`;
+    }
+
+    // Hàm lấy dữ liệu cảm biến
+    async function fetchSensorData() {
+      try {
+        const response = await fetch('/api/sensors');
+        if (!response.ok) throw new Error('Lỗi kết nối');
+        const data = await response.json();
+        updateUI(data);
+      } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu:', error);
+        document.querySelectorAll('.status span').forEach(el => {
+          el.textContent = 'Lỗi tải dữ liệu';
+        });
+      }
+    }
+
+    // Hàm gửi lệnh điều khiển
+    async function sendCommand(device) {
+      try {
+        const response = await fetch('/api/control', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ device })
+        });
+        
+        if (!response.ok) throw new Error('Lỗi điều khiển');
+        const result = await response.json();
+        fetchSensorData(); // Cập nhật lại trạng thái sau khi điều khiển
+      } catch (error) {
+        console.error('Lỗi khi gửi lệnh:', error);
+        alert('Lỗi khi thực hiện thao tác!');
+      }
+    }
+
+    // Gán sự kiện cho các nút
+    document.querySelector('.btn-mode').addEventListener('click', () => sendCommand('mode'));
+    document.querySelector('.btn-pump').addEventListener('click', () => sendCommand('pump'));
+    document.querySelector('.btn-light').addEventListener('click', () => sendCommand('light'));
+
+    // Tự động cập nhật dữ liệu mỗi 3 giây
+    setInterval(fetchSensorData, 3000);
+    fetchSensorData(); // Lấy dữ liệu ngay khi tải trang
+  </script>
 </body>
 </html>
