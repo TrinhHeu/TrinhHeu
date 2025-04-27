@@ -1,3 +1,4 @@
+/project-root
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -146,3 +147,34 @@
   </script>
 </body>
 </html>
+// Giả lập dữ liệu cảm biến (có thể kết nối với IoT thực tế)
+export default function handler(req, res) {
+  const sensorData = {
+    temperature: Math.floor(Math.random() * 10) + 25, // 25-35°C
+    humidity: Math.floor(Math.random() * 20) + 60,   // 60-80%
+    soilMoisture: Math.floor(Math.random() * 300) + 400, // 400-700
+    light: Math.random() > 0.5 ? "Sáng" : "Tối",
+    rain: Math.random() > 0.8,
+    mode: Math.random() > 0.5 ? "auto" : "manual",
+    lightOn: Math.random() > 0.5,
+    pumpOn: Math.random() > 0.5
+  };
+  res.status(200).json(sensorData);
+}
+// Xử lý lệnh điều khiển từ frontend
+export default function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { device } = req.body;
+  
+  // Giả lập điều khiển thành công
+  // Trong thực tế: Gửi lệnh đến thiết bị IoT qua MQTT/HTTP
+  console.log(`Đã nhận lệnh điều khiển: ${device}`);
+  
+  res.status(200).json({ 
+    message: `Đã thực hiện ${device}`,
+    device
+  });
+}
