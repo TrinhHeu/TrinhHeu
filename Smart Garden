@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Garden</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 50%, #e0f2f1 100%);
+      background-attachment: fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      min-height: 100vh;
+    }
+    h1 {
+      color: #00695c;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: #ffffff;
+      padding: 30px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      border-radius: 20px;
+      text-align: left;
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .status {
+      font-size: 18px;
+      margin: 12px 0;
+      display: flex;
+      align-items: center;
+    }
+    .status span {
+      margin-left: 10px;
+    }
+    .buttons {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 8px;
+      border: none;
+      border-radius: 30px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+    }
+    .btn-mode { background: #00796b; }
+    .btn-mode:hover { background: #004d40; }
+
+    .btn-pump { background: #039be5; }
+    .btn-pump:hover { background: #0277bd; }
+
+    .btn-light { background: #fbc02d; color: #333; }
+    .btn-light:hover { background: #f9a825; }
+  </style>
+</head>
+<body>
+  <h1>🌿 Smart Garden 🌿</h1>
+  <div class="card">
+    <div class="status">🌡️<span>Nhiệt độ: 26°C</span></div>
+    <div class="status">💧<span>Độ ẩm không khí: 65%</span></div>
+    <div class="status">🌱<span>Độ ẩm đất: 430 (Khô nếu &lt; 500)</span></div>
+    <div class="status">☀️<span>Ánh sáng: Tối</span></div>
+    <div class="status">🌧️<span>Mưa: Không mưa</span></div>
+    <div class="status">🔄<span>Chế độ: Tự động</span></div>
+    <div class="status">💡<span>Đèn: BẬT</span></div>
+    <div class="status">🚿<span>Máy bơm: TẮT</span></div>
+
+    <div class="buttons">
+      <button class="btn btn-mode">🔄 Chuyển chế độ</button>
+      <button class="btn btn-pump">🚿 Bật/Tắt Bơm</button>
+      <button class="btn btn-light">💡 Bật/Tắt Đèn</button>
+    </div>
+  </div>
+</body>
+</html>
